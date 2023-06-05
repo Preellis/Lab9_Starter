@@ -202,8 +202,18 @@
       console.timeEnd('Timer');
     });
 
+
     errorBtns[13].addEventListener('click', () => {
-      console.trace();
+      const deep = () => {
+        deeper();
+      }
+      const deeper = () => {
+        deepest();
+      }
+      const deepest = () => {
+        console.trace();
+      }
+      deep();
     });
 
     errorBtns[14].addEventListener('click', () => {
