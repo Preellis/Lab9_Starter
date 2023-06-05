@@ -87,7 +87,22 @@
     </section>
   </main>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
   <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "c09b862da72d4a4389dd6c48ee3cfa2d"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+  <script>
+
+    class DataEntryError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "DataEntryError"; 
+      }
+    }
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -95,13 +110,111 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      if (firstNum === '' || secondNum === '') {
+        throw new DataEntryError('A value is missing');
+      }
+      try {
+        if (Number.isNaN(Number(firstNum)) || Number(secondNum).isNaN()) {
+          console.log('A value is not a number')
+          throw new DataEntryError('A value is not a number');
+        }
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      }
+      catch (e) {
+        if (e instanceof DataEntryError) {
+          console.log('A Dataentryerror occurred:', e);
+        } else {
+          throw e;
+        }
+      }
+      finally {
+        console.log('Whatever happened, you\'re really cool for pressing a button');
+      }
+      
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     // Start your code here
     // You may move this JS to another file if you wish
+
+    errorBtns[0].addEventListener('click', () => {
+      console.log('I Logged');
+    });
+
+    errorBtns[1].addEventListener('click', () => {
+      console.error('This is a console error');
+    });
+
+    errorBtns[2].addEventListener('click', () => {
+      console.count();
+      console.count('Counting');
+      console.count();
+    });
+
+    errorBtns[3].addEventListener('click', () => {
+      console.warn('This is a console warning');
+    });
+
+    errorBtns[4].addEventListener('click', () => {
+      value = false;
+      console.assert(value, {value, msg: 'This is a failing assertion'});
+    });
+
+    errorBtns[5].addEventListener('click', () => {
+      console.clear();
+    });
+
+    errorBtns[6].addEventListener('click', () => {
+      console.dir(document.head);
+    });
+
+    errorBtns[7].addEventListener('click', () => {
+      console.dirxml(document);
+    });
+
+    errorBtns[8].addEventListener('click', () => {
+      console.group('People');
+      console.info('Thomas');
+      console.info('Powell');
+      console.info('Preston');
+    });
+
+    errorBtns[9].addEventListener('click', () => {
+      console.groupEnd('People');
+    });
+
+    errorBtns[10].addEventListener('click', () => {
+      console.table([{
+        type: 'Dog',
+        alive: false
+      }, {
+        type: 'Parrot',
+        alive: true
+      }]);
+    });
+
+    errorBtns[11].addEventListener('click', () => {
+      console.time('Timer');
+    });
+
+    errorBtns[12].addEventListener('click', () => {
+      console.timeEnd('Timer');
+    });
+
+    errorBtns[13].addEventListener('click', () => {
+      console.trace();
+    });
+
+    errorBtns[14].addEventListener('click', () => {
+      boom();
+    });
+
+    window.addEventListener('error', (e) => {
+      console.log("An Error Occurred! You can collect and send data here.", e)
+    });
+
+
   </script>
 </body>
 
